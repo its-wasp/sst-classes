@@ -1,6 +1,7 @@
 import { omit } from "lodash";
 const ADD_TO_CART = "ADD_TO_CART";
 const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
+const SET_ACTIVE_CATEGORY = 'SET_ACTIVE_CATEGORY';
 export function addToCart(product) {
   return {
     type: ADD_TO_CART,
@@ -13,6 +14,24 @@ export function removeFromCart(product) {
     type: REMOVE_FROM_CART,
     payload: product
   };
+}
+
+export function setActiveCategory(category) {
+  return (dispatch, getState) => {
+    const currentActiveCategory = getState().cart.activeCatetory;
+    if(currentActiveCategory === category) {
+       dispatch({
+         type: SET_ACTIVE_CATEGORY,
+         payload: null
+       });
+    }
+    else {
+      dispatch({
+        type: SET_ACTIVE_CATEGORY,
+        payload: category
+      });
+    }
+  }
 }
 
 function cartReducer(state= { items: {}}, action) {
@@ -64,6 +83,12 @@ function cartReducer(state= { items: {}}, action) {
       }
 
     }
+    case SET_ACTIVE_CATEGORY: {
+      return {
+        ...state,
+        activeCategory: action.payload
+      }
+    }
     default:
       return state;
   }
@@ -73,10 +98,10 @@ function cartReducer(state= { items: {}}, action) {
 export default cartReducer;
 
 
-// action is an object 
+// action is an object
 
 // type
 // payload
-//state = {items: {1:{id: 1, quantity: 11}, 2:{id: 2, quantity: 10}, 3:{id: 3, quantity: 10}, 4:{id: 4, quantity: 10}}} 
+//state = {items: {1:{id: 1, quantity: 11}, 2:{id: 2, quantity: 10}, 3:{id: 3, quantity: 10}, 4:{id: 4, quantity: 10}}}
 
 // ...state, ...product[1]
